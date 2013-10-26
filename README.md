@@ -4,7 +4,7 @@ An experiment to record audio+video using WebRTC and then send it to a server.
 
 # Uses
 
-* [RTCMultiConnection](https://github.com/muaz-khan/WebRTC-Experiment/tree/master/RTCMultiConnection)
+* [RecordRTC](https://github.com/muaz-khan/WebRTC-Experiment/tree/master/RecordRTC)
 * [FFmpeg](http://www.ffmpeg.org/)
 
 # Requires

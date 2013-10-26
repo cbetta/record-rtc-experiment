@@ -7,7 +7,7 @@ end
 
 post "/upload" do
   uuid = UUID.generate
-
+  puts params.inspect
   audio_type = params['audio'][:type].split("/").last
   File.open("uploads/#{uuid}.#{audio_type}", "w") do |f|
     f.write(params['audio'][:tempfile].read)
