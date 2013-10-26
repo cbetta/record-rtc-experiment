@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+
+  <body>
+    <script src="jquery-2.0.3.min.js"> </script>
+    <script src="RTCMultiConnection.js"> </script>
+
+    <style>
+        video {
+          width: 320px;
+          height: 240px;
+        }
+
+        button {
+          display: none;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function(){
+          var connection = new RTCMultiConnection();
+          var streamid = null
+          var recording = false;
+          var playing = false;
+
+          connection.session = {
+              audio: true,
+              video: {
+                width: 320,
+                height: 240
+              }
+          };
+
+          connection.onstream = function(e) {
+            video = e.mediaElement;
+            video.removeAttribute("controls");
+            $("#players").append(video);
+            $("#record_button").show();
+            streamid = e.streamid;
+          };
+
+          connection.open();
+
+          $("#record_button").click(function(){
+            if (recording) {
+              connection.streams[streamid].stopRecording(function (blob) {
+                var element = document.createElement(blob.recordingType);
+                element.id = blob.recordingType + "-player";
+                element.src = URL.createObjectURL(blob);
+
+                $("#players").append(element);
+                $("#play_button").show();
+                $("#record_button").text("Start recording");
+              });
+
+            } else {
+              recording = true;
+
+              connection.streams[streamid].startRecording({
+                audio: true,
+                video: {
+                  width: 320,
+                  height: 240
+                },
+                canvas: {
+                  width: 320,
+                  height: 240
+                }
+              });
+
+              $("#play_button").hide();
+              $("#record_button").text("Stop recording");
+            }
+          });
+
+          var stopPlayback = function() {
+            $("#video-player")[0].pause();
+            $("#video-player")[0].currentTime = 0;
+            $("#audio-player")[0].pause();
+            $("#audio-player")[0].currentTime = 0;
+            $("#play_button").text("Play");
+            playing = false;
+          }
+
+          var startPlayback = function() {
+            $("#video-player")[0].play();
+            $("#audio-player")[0].play();
+
+            $("video").bind("ended", function() {
+               stopPlayback();
+            });
+
+            $("#play_button").text("Stop");
+            playing = true;
+          }
+
+          $("#play_button").click(function(){
+            if (playing) {
+              stopPlayback();
+            } else {
+              startPlayback();
+            }
+          });
+
+
+        });
+    </script>
+
+  </body>
+
+  <div id='players'></div>
+  <button id='record_button'>Start recording</button>
+  <button id='play_button'>Play</button>
+
+</html>
