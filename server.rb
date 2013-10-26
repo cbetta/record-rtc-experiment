@@ -23,3 +23,8 @@ post "/upload" do
 
   uuid
 end
+
+get "/video/:uuid" do
+  @uuid = params[:uuid]
+  erb :video
+end

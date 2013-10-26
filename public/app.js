@@ -38,6 +38,7 @@ $(document).ready(function(){
    // prepare the streams
    connection.streams[streamid].startRecording({
      audio: true,
+     bufferSize: 16384,
      video: {
        width: 640,
        height: 360
@@ -142,7 +143,7 @@ $(document).ready(function(){
 
   request.onreadystatechange = function () {
     if (request.readyState == 4 && request.status == 200) {
-      alert(request.responseText);
+      window.location.href = "/video/"+request.responseText;
     }
   };
 
