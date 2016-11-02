@@ -337,7 +337,7 @@ function StereoAudioRecorder(mediaStream, root) {
     console.log('sample-rate', sampleRate);
     console.log('buffer-size', bufferSize);
 
-    recorder = context.createJavaScriptNode(bufferSize, 2, 2);
+    recorder = context.createScriptProcessor(bufferSize, 2, 2);
 
     recorder.onaudioprocess = function(e) {
         if (!recording) return;
